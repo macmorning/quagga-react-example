@@ -1,15 +1,18 @@
-import React from 'react';
+import React from "react";
 import Quagga from 'quagga';
+import PropTypes from 'prop-types';
 
-export default React.createClass({
-    propTypes: {
-        onDetected: React.PropTypes.func.isRequired
-    },
+class Scanner extends React.Component {
+    constructor(props) {
+        super(props);
+        this._onDetected = this._onDetected.bind(this);
+    }
+
     render() {
         return (
             <div id="interactive" className="viewport"/>
         );
-    },
+    }
 
     componentDidMount() {
         Quagga.init({
@@ -18,16 +21,16 @@ export default React.createClass({
                 constraints: {
                     width: 640,
                     height: 480,
-                    facing: "environment" // or user
+                    facingMode: "environment", // or user
                 }
             },
             locator: {
                 patchSize: "medium",
                 halfSample: true
             },
-            numOfWorkers: 2,
+            numOfWorkers: 1,
             decoder: {
-                readers : [ "code_128_reader"]
+                readers : ["ean_reader"]
             },
             locate: true
         }, function(err) {
@@ -37,13 +40,22 @@ export default React.createClass({
             Quagga.start();
         });
         Quagga.onDetected(this._onDetected);
-    },
+    }
 
     componentWillUnmount() {
         Quagga.offDetected(this._onDetected);
-    },
+        Quagga.stop();
+    }
 
     _onDetected(result) {
+        const drawingCanvas = Quagga.canvas.dom.overlay;
+        drawingCanvas.style.display = 'none';
         this.props.onDetected(result);
     }
-});
+};
+
+Scanner.propTypes = {
+    onDetected: PropTypes.func.isRequired
+};
+
+export default Scanner;

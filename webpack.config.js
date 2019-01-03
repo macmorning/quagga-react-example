@@ -3,14 +3,23 @@ module.exports = {
         './src/index.js'
     ],
     module: {
-        loaders: [{
-            test: /\.jsx?$/,
-            exclude: /node_modules/,
-            loader: 'babel'
-        }]
+        rules: [
+            {
+                test: /\.jsx?$/,
+                exclude: /node_modules/,
+                use: [
+                  {
+                    loader: 'babel-loader',
+                    options: {
+                      presets: ['react']
+                    }
+                  }
+                ],
+            }
+        ]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        extensions: ['.js', '.jsx']
     },
     output: {
         path: __dirname + '/dist',
