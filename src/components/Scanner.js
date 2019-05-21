@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Quagga from 'quagga';
 import PropTypes from 'prop-types';
 
@@ -30,7 +30,7 @@ class Scanner extends React.Component {
             },
             numOfWorkers: 1,
             decoder: {
-                readers : ["ean_reader"]
+                readers : ["code_128_reader", "ean_reader", "upc_reader"]
             },
             locate: true
         }, function(err) {
